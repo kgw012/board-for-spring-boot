@@ -11,16 +11,25 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
+@EnableTransactionManagement
 public class DBConfiguration {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	@Bean
+	public TransactionManager transactionManager() {
+		return new DataSourceTransactionManager(dataSource());
+	}
 
 	@Bean
 	@ConfigurationProperties(prefix = "spring.datasource.hikari")
